@@ -59,9 +59,10 @@ void checkFwUpdate(){
    https.begin(client, fwPath);
    String payload;
    if (https.GET() == 200){
-       int fwNew = StringToInt(https.getString());
+       payload = https.getString();
+       int fwNew = payload.toInt();
        Serial.printf("\nPayload: %i", fwNew);
-       Serial.printf("\n Old Version: %s", fwVersion);
+       Serial.printf("\n Old Version: %i", fwVersion);
        if (fwNew != fwVersion) {
            Serial.printf("New Update!!");
        } else {
