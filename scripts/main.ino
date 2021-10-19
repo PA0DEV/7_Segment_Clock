@@ -12,8 +12,9 @@ WiFiClientSecure client;
 HTTPClient https;
 
 // Declare global variables
-const String fwVersion = "0.0.1";
-const String fwUrl = "https://raw.githubusercontent.com/PA0DEV/7_Segment_Clock/main/scripts/latest.version";
+const int fwVersion = 1;
+const String fwUrl = "https://raw.githubusercontent.com";
+const String fwPath = "https://raw.githubusercontent.com/PA0DEV/7_Segment_Clock/main/scripts/latest.version";
 const char* ssid = "PATH to Internet";
 const char* pass = "WLANphtasBUDE";
 IPAddress ip(192, 168, 178, 200);
@@ -53,13 +54,20 @@ void checkFwUpdate(){
     /*Check for newest FW Version in the git repository (on fw Url)
     */
    client.setInsecure();
-   client.connect("https://raw.githubusercontent.com", 443);
+   client.connect(fwUrl, 443);
 
-   https.begin(client, fwUrl);
+   https.begin(client, fwPath);
    String payload;
    if (https.GET() == 200){
-       payload = https.getString();
-       Serial.printf("Payload: %s", payload);
+       int fwNew = StringToInt(https.getString());
+       Serial.printf("\nPayload: %i", fwNew);
+       Serial.printf("\n Old Version: %s", fwVersion);
+       if (fwNew != fwVersion) {
+           Serial.printf("New Update!!");
+       } else {
+           Serial.printf("No new update.");
+       };
+   } else {
+       
    };
-   Serial.printf("\nHTTP code: %i", https.GET());
-   };
+};
